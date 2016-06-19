@@ -79,11 +79,11 @@ class EarlyStopping(Callback):
                 self.model.stop_training = True
             self.wait += 1    
 
-DEEP_EARLY_STOP_P = 2
+DEEP_EARLY_STOP_P = 10
 DEEP_SGDLR = 0.1
-early_stopping = EarlyStopping(monitor='val_loss', patience=DEEP_EARLY_STOP_P)
+early_stopping = EarlyStopping(monitor='val_acc', patience=DEEP_EARLY_STOP_P)
 
-batch_size = 128
+batch_size = 200
 nb_classes = 361
 nb_epoch = 200
 
@@ -92,22 +92,23 @@ img_planes = 2
 # input image dimensions
 img_rows, img_cols = 19, 19
 # number of convolutional filters to use
-nb_filters = 32
+nb_filters = 48
 # size of pooling area for max pooling
 #nb_pool = 2
 # convolution kernel size
-nb_conv = 3
+nb_conv = 7
 
 # the data, shuffled and split between train and test sets
 def load_npy(Xfilename, yfilename):
 
     total_stat_list = np.load(Xfilename)
-    total_next_list = np.load(yfilename)
+    total_next_list = np.int8(np.load(yfilename))
     rval = total_stat_list, total_next_list
     return rval
 
-Xfilename = 'test_750test.dat_X.npy'
-yfilename = 'test_750test.dat_Y.npy'
+filename = 'output_1500_01.dat_'
+Xfilename = filename + 'X.npy'
+yfilename = filename + 'Y.npy'
 
 X_data, y_data = load_npy(Xfilename, yfilename)
 total_len = len(y_data)
@@ -120,8 +121,6 @@ X_train = X_train.reshape(X_train.shape[0], img_planes, img_rows, img_cols)
 X_test = X_test.reshape(X_test.shape[0], img_planes, img_rows, img_cols)
 #X_train = X_train.astype('float32')
 #X_test = X_test.astype('float32')
-X_train /= 255
-X_test /= 255
 print('X_train shape:', X_train.shape)
 print(X_train.shape[0], 'train samples')
 print(X_test.shape[0], 'test samples')
@@ -142,9 +141,9 @@ model.add(Activation('relu'))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
-model.add(Dense(128))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
+#model.add(Dense(128))
+#model.add(Activation('relu'))
+#model.add(Dropout(0.5))
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
