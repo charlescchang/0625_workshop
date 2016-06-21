@@ -6,6 +6,7 @@ Gets to 99.25% test accuracy after 12 epochs
 '''
 
 from __future__ import print_function
+import sys
 import numpy as np
 np.random.seed(1337)  # for reproducibility
 
@@ -79,8 +80,8 @@ class EarlyStopping(Callback):
                 self.model.stop_training = True
             self.wait += 1    
 
-DEEP_EARLY_STOP_P = 10
-DEEP_SGDLR = 0.1
+DEEP_EARLY_STOP_P = 5
+DEEP_SGDLR = 0.02
 early_stopping = EarlyStopping(monitor='val_acc', patience=DEEP_EARLY_STOP_P)
 
 batch_size = 200
@@ -158,3 +159,12 @@ model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch,
 score = model.evaluate(X_test, Y_test, verbose=0)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
+
+# save the model
+fnameMODEL = sys.argv[0]
+model_f = fnameMODEL + '.json'
+weight_f = fnameMODEL + '.hdf5'
+json_string = model.to_json()
+with open(model_f, 'w') as output_file:
+    output_file.write(json_string)
+model.save_weights(weight_f, overwrite=True)

@@ -8,6 +8,7 @@ Gets to 99.25% test accuracy after 12 epochs
 from __future__ import print_function
 import sys
 import time
+import operator
 import numpy as np
 np.random.seed(1337)  # for reproducibility
 
@@ -77,7 +78,13 @@ while True:
     start_t1 = time.time()
     result = reload_model.predict(X_test[test_idx].reshape(1, 1, img_rows, img_cols))[0]
     start_t2 = time.time()
+
     print('predict result:')
+    result_dict = {}
     for i in xrange(len(result)):
-        print(str(i)+' possibility: %0.6f' %(float(result[i])))
+        result_dict[i] = float(result[i])
+    sorted_result_dict = sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True)
+    for tp in sorted_result_dict:
+        print(str(tp[0])+' possibility: %0.6f' %(tp[1]))
     print('predict time:'+str(start_t2-start_t1))
+
