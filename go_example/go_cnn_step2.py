@@ -106,7 +106,8 @@ def load_npy(Xfilename, yfilename):
     rval = total_stat_list, total_next_list
     return rval
 
-filename = 'test_750test.dat_'
+#filename = 'test_750test.dat_'
+filename = 'output_1500_01.dat_'
 Xfilename = filename + 'X.npy'
 yfilename = filename + 'Y.npy'
 
