@@ -146,9 +146,9 @@ reload_model.compile(loss='categorical_crossentropy',
               optimizer=sgd,
               metrics=['accuracy'])
 
-score = reload_model.evaluate(X_test, Y_test, verbose=0)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
+#score = reload_model.evaluate(X_test, Y_test, verbose=0)
+#print('Test score:', score[0])
+#print('Test accuracy:', score[1])
 
 while True:
     print('Please input the index of the test sample:0~'+str(len(X_test)-1))
